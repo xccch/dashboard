@@ -170,10 +170,10 @@ def api_host_variables(hostname):
     if not groups_host:
         return jsonify(msg='the host %s has no group attribute' % hostname)
 
-    ret = {}
+    data = []
     for gh in groups_host:
         variables = Variable.select_vs(where='grp_id = %s' % gh.grp_id)
         for v in variables:
-            ret[v.name] = v.content
+            data.append({'key': v.name, 'value': v.content, 'note': v.note})
 
-    return jsonify(msg='ok', data=ret)
+    return jsonify(msg='ok', data=data)
