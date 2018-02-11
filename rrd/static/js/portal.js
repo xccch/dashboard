@@ -673,3 +673,40 @@ function alarm_case_event_batch_rm() {
         return false;
     });
 }
+
+function create_variable(grp_id) {
+    $.post('/portal/group/' + grp_id + '/variable/creator', {
+        'name': $("#name").val(),
+        'content': $("#content").val(),
+        'note': $("#note").val()
+    }, function (json) {
+        handle_quietly(json, function () {
+            location.href = "/portal/group/" + grp_id + "/variables";
+        });
+    }, "json")
+}
+
+function delete_variable(variable_id) {
+    my_confirm('确定要删除？？？', ['确定', '取消'], function () {
+        $.getJSON('/portal/variable/delete/' + variable_id, {}, function (json) {
+            handle_quietly(json, function () {
+                location.reload();
+            });
+        });
+    }, function () {
+        return false;
+    });
+}
+
+function update_variable(variable_id, grp_id) {
+    $.post('/portal/variable/edit/' + variable_id, {
+        'name': $("#name").val(),
+        'content': $("#content").val(),
+        'note': $("#note").val(),
+        'grp_id': grp_id
+    }, function (json) {
+        handle_quietly(json, function () {
+            location.href = "/portal/group/" + grp_id + "/variables";
+        });
+    }, "json");
+}

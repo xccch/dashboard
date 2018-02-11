@@ -29,4 +29,5 @@ __all__ = [
         "template",
         "alarm",
         "alert_link",
+        "variable",
         ]
