@@ -675,6 +675,9 @@ function alarm_case_event_batch_rm() {
 }
 
 function create_variable(grp_id) {
+    if (!$("#name").val() || !$("#content").val()) {
+        return false;
+    }
     $.post('/portal/group/' + grp_id + '/variable/creator', {
         'name': $("#name").val(),
         'content': $("#content").val(),
@@ -699,6 +702,9 @@ function delete_variable(variable_id) {
 }
 
 function update_variable(variable_id, grp_id) {
+    if (!$("#name").val() || !$("#content").val()) {
+        return false;
+    }
     $.post('/portal/variable/edit/' + variable_id, {
         'name': $("#name").val(),
         'content': $("#content").val(),
