@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,10 +28,14 @@ from rrd.model.portal.expression import Expression
 from rrd.model.portal.strategy import Strategy
 from rrd.model.portal.group_host import GroupHost
 from rrd.model.portal.variable import Variable
+from rrd.model.portal.metric import Metric
+from rrd.model.portal.tag import Tag
 from rrd import corelib, config
 
 from rrd.utils.logger import logging
+
 log = logging.getLogger(__file__)
+
 
 @app.route("/favicon.ico")
 def favicon():
@@ -47,6 +51,7 @@ def api_version():
 def api_health():
     return 'ok'
 
+
 @app.route('/api/user/<int:user_id>/inteams/<team_names>')
 def api_user_in_teams(user_id, team_names):
     u = User.get_by_id(user_id)
@@ -57,6 +62,7 @@ def api_user_in_teams(user_id, team_names):
         return jsonify(data=True)
     else:
         return jsonify(data=False)
+
 
 @app.route('/api/uic/group')
 def api_query_uic_group():
@@ -115,7 +121,7 @@ def api_strategy_get(s_id):
     if not s:
         return jsonify(msg="no such strategy")
     return jsonify(msg='', data=s.to_json())
-    
+
 
 @app.route('/api/metric/query')
 def api_metric_query():
@@ -123,14 +129,13 @@ def api_metric_query():
     limit = int(request.args.get('limit', '10'))
 
     h = {"Content-type": "application/json"}
-    r = corelib.auth_requests("GET", "%s/metric/default_list" \
-            %(config.API_ADDR,), headers=h)
+    r = corelib.auth_requests("GET", "%s/metric/default_list" % (config.API_ADDR,), headers=h)
     if r.status_code != 200:
-        log.error("%s:%s" %(r.status_code, r.text))       
+        log.error("%s:%s" % (r.status_code, r.text))
         return []
 
     metrics = r.json() or []
-    metrics = [q,] + metrics
+    metrics = [q, ] + metrics
 
     return jsonify(data=[{'name': name} for name in metrics])
 
@@ -177,3 +182,30 @@ def api_host_variables(hostname):
             data.append({'key': v.name, 'value': v.content, 'note': v.note})
 
     return jsonify(msg='ok', data=data)
+
+
+@app.route('/v3/api/metrics', methods=['GET'])
+def api_metrics_query():
+    q = request.args.get('query', '').strip()
+    if not q:
+        return jsonify(data=[])
+    limit = int(request.args.get('limit', '10'))
+    where = "name like '%%{q}%%'".format(q=q)
+    metrics = Metric.select_vs(where=where, limit=limit)
+    data = [{'name': q}]
+    for metric in metrics:
+        data.append({'name': metric.name})
+    return jsonify(data=data)
+
+@app.route('/v3/api/tags', methods=['GET'])
+def api_tags_query():
+    q = request.args.get('query', '').strip()
+    if not q:
+        return jsonify(data=[])
+    limit = int(request.args.get('limit', '10'))
+    where = "name like '%%{q}%%'".format(q=q)
+    tags = Tag.select_vs(where=where, limit=limit)
+    data = [{'name': q}]
+    for tag in tags:
+        data.append({'name': tag.name})
+    return jsonify(data=data)

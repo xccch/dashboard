@@ -13,7 +13,9 @@
             </div>
         </div>
         <div class="panel-body" style="padding-left: 8px;">
-            当前HostGroup：<span class="green">{{ group.grp_name }}</span>
+            {% include "portal/variable/note.html" %}
+            <hr>
+            <h4>当前HostGroup：<span class="green">{{ group.grp_name }}</span></h4>
         </div>
 
         <!-- Table -->

@@ -359,7 +359,45 @@ function make_select2_for_metric(selector) {
             return obj.name;
         },
         ajax: {
-            url: "/api/metric/query",
+            //url: "/api/metric/query",
+            url: "/v3/api/metrics",
+            dataType: 'json',
+            data: function (term, page) {
+                return {
+                    query: term,
+                    limit: 10
+                };
+            },
+            results: function (json, page) {
+                return {results: json.data};
+            }
+        },
+
+        initSelection: function (element, callback) {
+            var val = $(element).val();
+            callback({id: val, name: val});
+        },
+
+        formatResult: function (obj) {
+            return obj.name
+        },
+        formatSelection: function (obj) {
+            return obj.name
+        }
+    });
+}
+
+function make_select2_for_tags(selector) {
+    $(selector).select2({
+        placeholder: "input tags",
+        allowClear: true,
+        quietMillis: 100,
+        minimumInputLength: 2,
+        id: function (obj) {
+            return obj.name;
+        },
+        ajax: {
+            url: "/v3/api/tags",
             dataType: 'json',
             data: function (term, page) {
                 return {

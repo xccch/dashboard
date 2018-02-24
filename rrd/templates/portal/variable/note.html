@@ -1,6 +1,6 @@
 <div>
-    <h4>说明:</h4>
-    <ol>
+    <h4>说明:<a class="small" href="javascript:show_or_hide_variable_note();">show or hide</a></h4>
+    <ol style="display:none" id="variable_note">
         <li>name和content不能为空，note可以为空;</li>
         <li>同一个参数集合下(绑定在同一个hostgroup下),所有参数不能同名;</li>
         <li>对于端口类型的参数，请以<b class="red">{process_name}_port</b>命名(如：nginx_port);如果多个端口，请以逗号(",")分隔;监控端口存活性的插件将找出所有*_port参数进行检测;</li>
@@ -19,3 +19,9 @@
         </li>
     </ol>
 </div>
+
+<script>
+    function show_or_hide_variable_note(){
+        $("#variable_note").toggle(1000);
+    }
+</script>
