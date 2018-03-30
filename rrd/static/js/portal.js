@@ -204,6 +204,7 @@ function update_expression() {
             'func': $.trim($("#func").val()),
             'op': $("#op").val(),
             'right_value': $.trim($("#right_value").val()),
+            'category': $.trim($("#category").val()),
             'uic': $.trim($("#uic").val()),
             'max_step': $.trim($("#max_step").val()),
             'priority': $.trim($("#priority").val()),
@@ -472,7 +473,8 @@ function save_strategy() {
         'right_value': $.trim($("#right_value").val()),
         'run_begin': $.trim($("#run_begin").val()),
         'run_end': $.trim($("#run_end").val()),
-        'tpl_id': $.trim($("#tpl_id").val())
+        'tpl_id': $.trim($("#tpl_id").val()),
+        'category': $.trim($("#category").val())
     }, function (json) {
         handle_quietly(json, function () {
             location.reload();
@@ -504,6 +506,7 @@ function fill_fields(sid) {
         $("#right_value").val(json.data.right_value);
         $("#run_begin").val(json.data.run_begin);
         $("#run_end").val(json.data.run_end);
+        $("#category").val(json.data.category);
         make_select2_for_metric("#metric");
     });
 }

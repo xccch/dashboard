@@ -11,8 +11,11 @@
             {% set right = '}' %}
             <div class="">{{ data.expression.expression }}</div>
             <div class="mt10">
-                <span class="gray">if {{ data.expression.func }}{{ data.expression.op }}{{ data.expression.right_value }}
-                    {{ left }}{{ data.action.html()|safe }}{{ right }}</span>
+                <span class="gray">
+                if {{ data.expression.func }}{{ data.expression.op }}{{ data.expression.right_value }}
+{#                    {{ left }}{{ data.action.html()|safe }}{{ right }}#}
+                    send to duty category: {{ data.category }}
+                 </span>
 
                 {% if data.expression.writable(g.user) %}
                     <div class="pull-right">
@@ -30,7 +33,8 @@
                 {% endif %}
             </div>
             <div class="mt10 gray">
-                note: {{ data.expression.note }} (Max:{{ data.expression.max_step }}, P{{ data.expression.priority }})
+                note: {{ data.expression.note }}
+{#                (Max:{{ data.expression.max_step }}, P{{ data.expression.priority }})#}
                 by {{ data.expression.create_user }}
             </div>
 

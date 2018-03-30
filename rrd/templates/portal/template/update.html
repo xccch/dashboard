@@ -34,6 +34,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">该模板中的策略列表</div>
+        {% include "portal/template/function_note.html" %}
         <div class="panel-body">
             <div class="pull-right">
                 <a class="btn btn-default" href="javascript:goto_strategy_add_div();">
@@ -50,7 +51,8 @@
                 <th>metric/<span class="text-success">tags</span><span class="gray"> [note]</span></th>
                 <th>condition</th>
 {#                <th>max</th>#}
-{#                <th>P</th>#}
+{#                <th>Priority</th>#}
+                <th>Category</th>
                 <th>run</th>
                 <th>operation</th>
             </tr>
@@ -67,6 +69,7 @@
                     </td>
 {#                    <td>{{ s.max_step }}</td>#}
 {#                    <td>{{ s.priority }}</td>#}
+                    <td>{{ s.category }}</td>
                     <td>{% if s.run_begin and s.run_end %}{{ s.run_begin }}-{{ s.run_end }}{% endif %}</td>
                     <td>
                         <a href="javascript:clone_strategy('{{ s.id }}');" style="text-decoration: none;">
@@ -108,7 +111,7 @@
                     tags: <input type="text" class="form-control" id="tags">
                     <span class="hidden">
                     Max: <input class="form-control" id="max_step" style="width: 100px;" value="3">
-                    P: <input class="form-control" id="priority" style="width: 60px;" value="0">
+                    P: <input class="form-control" id="priority" style="width: 100px;" value="0">
                     </span>
                     note: <input class="form-control" id="note">
                 </div>
@@ -126,7 +129,8 @@
                         <option value=">=">&gt;=</option>
                     </select>
                     <input type="text" value="0" class="form-control" id="right_value" style="width: 100px;">
-                    : alarm(); callback();
+{#                    : alarm(); callback();#}
+                    send to duty Category: <input class="form-control" id="category" value="ops">
                 </div>
             </div>
 

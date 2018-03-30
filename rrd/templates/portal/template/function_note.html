@@ -1,0 +1,18 @@
+<div>
+    <h5>策略函数说明:<a class="small" href="javascript:show_or_hide_function_note();">show or hide</a></h5>
+    <ol style="display:none" id="function_note">
+        <li>all(#3): 最新的3个点都满足阈值条件则报警</li>
+        <li>max(#3): 对于最新的3个点，其最大值满足阈值条件则报警</li>
+        <li>min(#3): 对于最新的3个点，其最小值满足阈值条件则报警</li>
+        <li>sum(#3): 对于最新的3个点，其和满足阈值条件则报警</li>
+        <li>avg(#3): 对于最新的3个点，其平均值满足阈值条件则报警</li>
+        <li>diff(#3): 拿最新push上来的点（被减数），与历史最新的3个点（3个减数）相减，得到3个差，只要有一个差满足阈值条件则报警</li>
+        <li>pdiff(#3): 拿最新push上来的点，与历史最新的3个点相减，得到3个差，再将3个差值分别除以减数，得到3个商值，只要有一个商值满足阈值则报警</li>
+    </ol>
+</div>
+
+<script>
+    function show_or_hide_function_note(){
+        $("#function_note").toggle(1000);
+    }
+</script>

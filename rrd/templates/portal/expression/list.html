@@ -28,8 +28,11 @@
 
             <div class="">{{ v.expression }}</div>
             <div class="mt10">
-                <span class="gray">if {{ v.func }}{{ v.op }}{{ v.right_value }}
-                    {{ left }}{{ v.action.html()|safe }}{{ right }}</span>
+                <span class="gray">
+                if {{ v.func }}{{ v.op }}{{ v.right_value }}
+{#                    {{ left }}{{ v.action.html()|safe }}{{ right }}#}
+                send to duty category: {{ v.category }}
+                </span>
 
                 {% if v.writable(g.user) %}
                     <div class="pull-right">
@@ -47,7 +50,8 @@
                 {% endif %}
             </div>
             <div class="mt10 gray">
-                note: {{ v.note }} (Max:{{ v.max_step }}, P{{ v.priority }})
+                note: {{ v.note }}
+{#                (Max:{{ v.max_step }}, P{{ v.priority }})#}
                 by {{ v.create_user }}
             </div>
 

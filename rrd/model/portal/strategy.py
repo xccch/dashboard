@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,9 +20,10 @@ from .bean import Bean
 
 class Strategy(Bean):
     _tbl = 'strategy'
-    _cols = 'id,metric,tags,max_step,priority,func,op,right_value,note,run_begin,run_end,tpl_id'
+    _cols = 'id,metric,tags,max_step,priority,func,op,right_value,note,run_begin,run_end,tpl_id,category'
 
-    def __init__(self, _id, metric, tags, max_step, priority, func, op, right_value, note, run_begin, run_end, tpl_id):
+    def __init__(self, _id, metric, tags, max_step, priority, func, op, right_value, note, run_begin, run_end, tpl_id,
+                 category):
         self.id = _id
         self.metric = metric
         self.tags = tags
@@ -35,6 +36,7 @@ class Strategy(Bean):
         self.run_begin = run_begin
         self.run_end = run_end
         self.tpl_id = tpl_id
+        self.category = category
 
     def to_json(self):
         return {
@@ -49,6 +51,7 @@ class Strategy(Bean):
             'note': self.note,
             'run_begin': self.run_begin,
             'run_end': self.run_end,
-            'tpl_id': self.tpl_id
+            'tpl_id': self.tpl_id,
+            'category': self.category
         }
 

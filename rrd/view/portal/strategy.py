@@ -34,6 +34,7 @@ def strategy_update_post():
     run_begin = request.form['run_begin'].strip()
     run_end = request.form['run_end'].strip()
     tpl_id = request.form['tpl_id'].strip()
+    category = request.form['category'].strip()
 
     if not metric:
         return jsonify(msg='metric is blank')
@@ -54,7 +55,8 @@ def strategy_update_post():
                 'right_value': right_value,
                 'note': note,
                 'run_begin': run_begin,
-                'run_end': run_end
+                'run_end': run_end,
+                'category': category
             },
             'id=%s',
             [sid]
@@ -74,7 +76,8 @@ def strategy_update_post():
             'note': note,
             'run_begin': run_begin,
             'run_end': run_end,
-            'tpl_id': tpl_id
+            'tpl_id': tpl_id,
+            'category': category
         }
     )
     return jsonify(msg='')

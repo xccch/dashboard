@@ -68,6 +68,7 @@ def expression_update_post():
     func = request.form['func'].strip()
     op = request.form['op'].strip()
     right_value = request.form['right_value'].strip()
+    category = request.form['category'].strip()
     uic_groups = request.form['uic'].strip()
     max_step = request.form['max_step'].strip()
     priority = int(request.form['priority'].strip())
@@ -95,6 +96,9 @@ def expression_update_post():
     if not priority:
         priority = 0
 
+    if not category:
+        category = 'ops'
+
     return jsonify(msg=Expression.save_or_update(
         expression_id,
         expression,
@@ -112,6 +116,7 @@ def expression_update_post():
         after_callback_sms,
         after_callback_mail,
         g.user.name,
+        category
     ))
 
 

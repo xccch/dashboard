@@ -32,13 +32,14 @@
                     <input type="text" value="{{ data.expression.right_value or '0' }}" class="form-control"
                            id="right_value"
                            style="width: 100px;">
-                    : alarm(); callback();
+                    send to duty Category: <input class="form-control" id="category" value={{ data.expression.category or 'ops' }}>
+                    备注信息（将附在告警内容中发送）：<input class="form-control" id="note" value="{{ data.expression.note }}">
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default hidden">
         <div class="panel-heading">def alarm(): #配置了UIC组才会发报警</div>
         <div class="panel-body">
             报警接收组（在UIC中管理报警组，<a target="_blank" href="/team/list">快捷入口</a>）：
@@ -52,13 +53,13 @@
                     <input class="form-control" id="priority"
                            style="width: 60px;"
                            value="{{ data.expression.priority or '0' }}">
-                    备注信息（将附在告警内容中发送）：<input class="form-control" id="note" value="{{ data.expression.note }}">
+{#                    备注信息（将附在告警内容中发送）：<input class="form-control" id="note" value="{{ data.expression.note }}">#}
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="panel panel-default">
+    <div class="panel panel-default hidden">
         <div class="panel-heading">def callback(): #高级用法，配置了callback地址才会触发回调</div>
         <div class="panel-body">
             callback地址（只支持http get方式回调）：

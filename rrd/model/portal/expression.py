@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,10 +23,10 @@ from rrd.model.user import User
 
 class Expression(Bean):
     _tbl = 'expression'
-    _cols = 'id, expression, func, op, right_value, max_step, priority, note, action_id, create_user, pause'
+    _cols = 'id, expression, func, op, right_value, max_step, priority, note, action_id, create_user, pause, category'
 
     def __init__(self, _id, expression, func, op, right_value, max_step, priority, note, action_id,
-                 create_user, pause):
+                 create_user, pause, category):
         self.id = _id
         self.expression = expression
         self.func = func
@@ -39,15 +39,16 @@ class Expression(Bean):
         self.create_user = create_user
         self.pause = pause
         self.action = None
+        self.category = category
 
     @classmethod
     def save_or_update(cls, expression_id, expression, func, op, right_value, uic_groups, max_step, priority, note, url,
                        callback, before_callback_sms, before_callback_mail,
-                       after_callback_sms, after_callback_mail, login_user):
+                       after_callback_sms, after_callback_mail, login_user, category='ops'):
         if not expression.startswith('each('):
             return 'only support each expression. e.g. each(metric=? xx=yy)'
 
-        if not 'metric=' in expression:
+        if 'metric=' not in expression:
             return 'expression is invalid. e.g. each(metric=? xx=yy)'
 
         left = expression.find('(')
@@ -72,17 +73,17 @@ class Expression(Bean):
             return cls.update_expression(expression_id, expression, func, op, right_value, uic_groups, max_step,
                                          priority, note, url,
                                          callback, before_callback_sms, before_callback_mail,
-                                         after_callback_sms, after_callback_mail)
+                                         after_callback_sms, after_callback_mail, category)
         else:
             return cls.insert_expression(expression, func, op, right_value, uic_groups, max_step,
                                          priority, note, url, callback,
                                          before_callback_sms, before_callback_mail,
-                                         after_callback_sms, after_callback_mail, login_user)
+                                         after_callback_sms, after_callback_mail, login_user, category)
 
     @classmethod
     def insert_expression(cls, content, func, op, right_value, uic_groups, max_step, priority, note, url,
                           callback, before_callback_sms, before_callback_mail,
-                          after_callback_sms, after_callback_mail, user_name):
+                          after_callback_sms, after_callback_mail, user_name, category):
         action_id = Action.insert({
             'uic': uic_groups,
             'url': url,
@@ -105,7 +106,8 @@ class Expression(Bean):
             'priority': priority,
             'note': note,
             'action_id': action_id,
-            'create_user': user_name
+            'create_user': user_name,
+            'category': category
         })
 
         if expression_id:
@@ -116,7 +118,7 @@ class Expression(Bean):
     @classmethod
     def update_expression(cls, expression_id, content, func, op, right_value, uic_groups, max_step, priority, note, url,
                           callback, before_callback_sms, before_callback_mail,
-                          after_callback_sms, after_callback_mail):
+                          after_callback_sms, after_callback_mail, category):
         e = Expression.get(expression_id)
         if not e:
             return 'no such expression %s' % expression_id
@@ -148,6 +150,7 @@ class Expression(Bean):
                 'max_step': max_step,
                 'priority': priority,
                 'note': note,
+                'category': category
             },
             'id=%s',
             [e.id]
@@ -173,7 +176,7 @@ class Expression(Bean):
         return vs, total
 
     def writable(self, login_user):
-        #login_user can be str or User obj
+        # login_user can be str or User obj
         if isinstance(login_user, str):
             login_user = User.get_by_name(login_user)
 
@@ -201,12 +204,13 @@ class Expression(Bean):
     def to_json(self):
         return {
             "id": self.id,
-            "expression": self.expression,                       
+            "expression": self.expression,
             "func": self.func,
             "op": self.op,
             "right_value": self.right_value,
             "max_step": self.max_step,
             "priority": self.priority,
             "note": self.note,
-            "action_id": self.action_id
+            "action_id": self.action_id,
+            "category": self.category
         }
