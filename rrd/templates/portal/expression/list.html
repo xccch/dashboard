@@ -32,6 +32,7 @@
                 if {{ v.func }}{{ v.op }}{{ v.right_value }}
 {#                    {{ left }}{{ v.action.html()|safe }}{{ right }}#}
                 send to duty category: {{ v.category }}
+                level: {% if v.priority == 0 %}Critical{% else %}Warning{% endif %}
                 </span>
 
                 {% if v.writable(g.user) %}

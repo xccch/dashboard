@@ -32,7 +32,18 @@
                     <input type="text" value="{{ data.expression.right_value or '0' }}" class="form-control"
                            id="right_value"
                            style="width: 100px;">
-                    send to duty Category: <input class="form-control" id="category" value={{ data.expression.category or 'ops' }}>
+                    send to duty Category:
+                    <input class="form-control" id="category" value={{ data.expression.category or 'ops' }}>
+                    Level:
+                    <select class="form-control" id="priority">
+                        {% if not data.expression.priority %}
+                        <option value=0 selected>Critical</option>
+                        <option value=1>Warning</option>
+                        {% else %}
+                        <option value=0>Critical</option>
+                        <option value=1 selected>Warning</option>
+                        {% endif %}
+                    </select>
                     备注信息（将附在告警内容中发送）：<input class="form-control" id="note" value="{{ data.expression.note }}">
                 </div>
             </div>
@@ -50,9 +61,9 @@
                     最多报警次数：<input class="form-control" id="max_step" style="width: 100px;"
                                   value="{{ data.expression.max_step or '3' }}">
                     报警级别（&lt;3: sms and mail; &gt;=3: mail）：
-                    <input class="form-control" id="priority"
-                           style="width: 60px;"
-                           value="{{ data.expression.priority or '0' }}">
+{#                    <input class="form-control" id="priority"#}
+{#                           style="width: 60px;"#}
+{#                           value="{{ data.expression.priority or '0' }}">#}
 {#                    备注信息（将附在告警内容中发送）：<input class="form-control" id="note" value="{{ data.expression.note }}">#}
                 </div>
             </div>

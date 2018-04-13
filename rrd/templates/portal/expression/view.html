@@ -15,6 +15,7 @@
                 if {{ data.expression.func }}{{ data.expression.op }}{{ data.expression.right_value }}
 {#                    {{ left }}{{ data.action.html()|safe }}{{ right }}#}
                     send to duty category: {{ data.category }}
+                    level: {% if data.priority == 0 %}Critical{% else %}Warning{% endif %}
                  </span>
 
                 {% if data.expression.writable(g.user) %}

@@ -40,7 +40,7 @@
                 <th>metric/<span class="text-success">tags</span><span class="gray"> [note]</span></th>
                 <th>condition</th>
 {#                <th>max</th>#}
-{#                <th>Priority</th>#}
+                <th>Level</th>
                 <th>Category</th>
                 <th>run</th>
             </tr>
@@ -56,7 +56,7 @@
                         {{ s.func }}{{ s.op }}{{ s.right_value }}
                     </td>
 {#                    <td>{{ s.max_step }}</td>#}
-{#                    <td>{{ s.priority }}</td>#}
+                    <td>{% if s.priority == 0 %}Critical{% else %}Warning{% endif %}</td>
                     <td>{{ s.category }}</td>
                     <td>{% if s.run_begin and s.run_end %}{{ s.run_begin }}-{{ s.run_end }}{% endif %}</td>
                 </tr>

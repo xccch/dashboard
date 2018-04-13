@@ -51,7 +51,7 @@
                 <th>metric/<span class="text-success">tags</span><span class="gray"> [note]</span></th>
                 <th>condition</th>
 {#                <th>max</th>#}
-{#                <th>Priority</th>#}
+                <th>Priority</th>
                 <th>Category</th>
                 <th>run</th>
                 <th>operation</th>
@@ -68,7 +68,7 @@
                         {{ s.func }}{{ s.op }}{{ s.right_value }}
                     </td>
 {#                    <td>{{ s.max_step }}</td>#}
-{#                    <td>{{ s.priority }}</td>#}
+                    <td>{% if s.priority == 0 %}Critical{% else %}Warning{% endif %}</td>
                     <td>{{ s.category }}</td>
                     <td>{% if s.run_begin and s.run_end %}{{ s.run_begin }}-{{ s.run_end }}{% endif %}</td>
                     <td>
@@ -111,8 +111,12 @@
                     tags: <input type="text" class="form-control" id="tags">
                     <span class="hidden">
                     Max: <input class="form-control" id="max_step" style="width: 100px;" value="3">
-                    P: <input class="form-control" id="priority" style="width: 100px;" value="0">
                     </span>
+                    Level:
+                    <select class="form-control" id="priority">
+                        <option value=0>Critical</option>
+                        <option value=1>Warning</option>
+                    </select>
                     note: <input class="form-control" id="note">
                 </div>
             </div>

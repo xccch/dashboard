@@ -454,9 +454,18 @@ function save_action_for_tpl(tpl_id) {
 }
 
 function goto_strategy_add_div() {
-    $("#add_div").show('fast');
+    $("#add_div").show('slow');
     $("#current_sid").val('');
     location.href = "#add";
+
+    $("#metric").val('');
+    $("#priority").val(0);
+    $("#tags").val('');
+    $("#note").val('');
+    $("#category").val('ops');
+    $("#run_begin").val('');
+    $("#run_end").val('');
+    $("#right_value").val('');
 }
 
 function save_strategy() {
