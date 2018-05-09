@@ -30,4 +30,5 @@ __all__ = [
         "alarm",
         "alert_link",
         "variable",
+        "metric",
         ]
