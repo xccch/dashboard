@@ -31,4 +31,5 @@ __all__ = [
         "alert_link",
         "variable",
         "metric",
+        "graph"
         ]
