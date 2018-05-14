@@ -9,7 +9,7 @@
         <button type="button" onclick="query_user();" class="btn btn-default">
             <span class="glyphicon glyphicon-search"></span>
         </button>
-        <input type="checkbox" name="mine" id="mine">
+        <input type="checkbox" name="mine" id="mine" {% if data.mine == '1' %}checked="checked"{% endif %}>
         <span>mine</span>
         <!-- anyone could create a hostgroup
         {% if data.is_root %}{% endif %}

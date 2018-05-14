@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,7 @@ def nodatas_get():
     page = int(request.args.get('p', 1))
     limit = int(request.args.get('limit', 5))
     query = request.args.get('q', '').strip()
-    mine = request.args.get('mine', '1')
+    mine = request.args.get('mine', '0')  # default show all data
     me = g.user.name if mine == '1' else None
     vs, total = Nodata.query(page, limit, query, me)
     return render_template(
@@ -40,6 +40,7 @@ def nodatas_get():
             'mine': mine,
         }
     )
+
 
 @app.route('/portal/nodata/add')
 def nodata_add_get():
@@ -60,12 +61,12 @@ def nodata_update_post():
     mock = request.form['mock'].strip()
 
     msg = required_chk({
-        'name' : name,
-        'endpoint' : obj,
-        'endpoint_type' : obj_type,
-        'metric' : metric,
-        'type' : dstype,
-        'step' : step,
+        'name': name,
+        'endpoint': obj,
+        'endpoint_type': obj_type,
+        'metric': metric,
+        'type': dstype,
+        'step': step,
         'mock_value': mock,
     })
 
@@ -84,6 +85,7 @@ def nodata_update_post():
         mock,
         g.user.name,
     ))
+
 
 @app.route('/portal/nodata/delete/<nodata_id>')
 def nodata_delete_get(nodata_id):
