@@ -2,7 +2,8 @@
 function query_user() {
     var query = $.trim($("#query").val());
     var mine = document.getElementById('mine').checked ? 1 : 0;
-    window.location.href = '/portal/hostgroup?q=' + query + '&mine=' + mine;
+    var manaul = document.getElementById('manaul').checked ? 1 : 0;
+    window.location.href = '/portal/hostgroup?q=' + query + '&mine=' + mine + '&manaul=' + manaul;
 }
 
 function create_hostgroup() {
@@ -455,7 +456,7 @@ function save_action_for_tpl(tpl_id) {
     var callback_url = $.trim($("#callback_url").val());
     var need_callback = callback_url.length > 0 ? 1 : 0;
     $.post(
-            '/portal/template/action/update/' + tpl_id,
+        '/portal/template/action/update/' + tpl_id,
         {
             'uic': $.trim($("#uic").val()),
             'url': callback_url,
@@ -647,13 +648,13 @@ function delete_cluster_monitor_item(cluster_id) {
 function alarm_case_all_select() {
     var boxes = $("input[type=checkbox]");
     for (var i = 0; i < boxes.length; i++) {
-        boxes[i].checked="checked";
+        boxes[i].checked = "checked";
     }
 }
 function alarm_case_event_all_select() {
     var boxes = $("input[type=checkbox]");
     for (var i = 0; i < boxes.length; i++) {
-        boxes[i].checked="checked";
+        boxes[i].checked = "checked";
     }
 }
 
@@ -661,9 +662,9 @@ function alarm_case_reverse_select() {
     var boxes = $("input[type=checkbox]");
     for (var i = 0; i < boxes.length; i++) {
         if (boxes[i].checked) {
-            boxes[i].checked=""
+            boxes[i].checked = ""
         } else {
-            boxes[i].checked="checked";
+            boxes[i].checked = "checked";
         }
     }
 }
@@ -671,9 +672,9 @@ function alarm_case_event_reverse_select() {
     var boxes = $("input[type=checkbox]");
     for (var i = 0; i < boxes.length; i++) {
         if (boxes[i].checked) {
-            boxes[i].checked=""
+            boxes[i].checked = ""
         } else {
-            boxes[i].checked="checked";
+            boxes[i].checked = "checked";
         }
     }
 }

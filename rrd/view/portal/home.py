@@ -32,8 +32,10 @@ def home_get():
     limit = int(request.args.get('limit', 20))
     query = request.args.get('q', '').strip()
     mine = request.args.get('mine', '0')  # default show all data
+    manaul = request.args.get('manaul', '0')  # 是否是手工创建
     me = g.user.name if mine == '1' else None
-    vs, total = HostGroup.query(page, limit, query, me)
+    come_from = 1 if manaul == '1' else None  # come_from = 1表示是手工创建的
+    vs, total = HostGroup.query(page, limit, query, me, come_from)
     log.debug(vs)
     return render_template(
         'portal/group/index.html',
@@ -44,6 +46,7 @@ def home_get():
             'limit': limit,
             'page': page,
             'mine': mine,
+            'manaul': manaul,
             'is_root': g.user.name in config.MAINTAINERS,
         }
     )

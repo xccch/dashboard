@@ -46,13 +46,17 @@ class HostGroup(Bean):
         return False
 
     @classmethod
-    def query(cls, page, limit, query, me=None):
+    def query(cls, page, limit, query, me=None, come_from=None):
         where = ''
         params = []
 
         if me is not None:
             where = 'create_user = %s'
             params = [me]
+
+        if come_from is not None:
+            where += ' and ' if where else ''
+            where += 'come_from = 1'
 
         if query:
             where += ' and ' if where else ''

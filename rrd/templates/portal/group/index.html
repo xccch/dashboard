@@ -11,6 +11,10 @@
         </button>
         <input type="checkbox" name="mine" id="mine" {% if data.mine == '1' %}checked="checked"{% endif %}>
         <span>mine</span>
+
+        <input type="checkbox" name="manaul" id="manaul" {% if data.manaul == '1' %}checked="checked"{% endif %}>
+        <span>手工创建的</span>
+
         <!-- anyone could create a hostgroup
         {% if data.is_root %}{% endif %}
         -->
