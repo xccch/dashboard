@@ -43,6 +43,7 @@
                 <th>Level</th>
                 <th>Category</th>
                 <th>run</th>
+                <th>Hook</th>
             </tr>
             </thead>
             <tbody>
@@ -59,6 +60,7 @@
                     <td>{% if s.priority == 0 %}Critical{% else %}Warning{% endif %}</td>
                     <td>{{ s.category }}</td>
                     <td>{% if s.run_begin and s.run_end %}{{ s.run_begin }}-{{ s.run_end }}{% endif %}</td>
+                    <td>{{ s.hook }}</td>
                 </tr>
             {% else %}
                 <tr>

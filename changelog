@@ -1,0 +1,22 @@
+
+
+2018.05.29
+对strategy metric增加hook
+
+表结构：
+CREATE TABLE `hook` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `strategy_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `expression_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `when_status` enum('OK','PROBLEM') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'OK',
+  `when_step` int(10) unsigned DEFAULT '1',
+  `hook_method` enum('GET','POST','DELETE','PUT') COLLATE utf8_unicode_ci DEFAULT 'GET',
+  `hook_url` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `params` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_strategy_id` (`strategy_id`),
+  KEY `idx_expression_id` (`expression_id`),
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+调整 rrd/template/template/update.html 模块
+增加 v3/api/hooks API,获取所有hooks

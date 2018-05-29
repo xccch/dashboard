@@ -54,6 +54,7 @@
                 <th>Priority</th>
                 <th>Category</th>
                 <th>run</th>
+                <th>Hook</th>
                 <th>operation</th>
             </tr>
             </thead>
@@ -72,16 +73,27 @@
                     <td>{{ s.category }}</td>
                     <td>{% if s.run_begin and s.run_end %}{{ s.run_begin }}-{{ s.run_end }}{% endif %}</td>
                     <td>
+                        {{ s.hook }}
+                        <span class="cut-line">¦</span>
+                        <a href="javascript:list_hooks('{{ s.id }}');" style="text-decoration: none;">
+                        {% if s.hook > 0 %}
+                            <span class="glyphicon glyphicon-list green"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-list"></span>
+                        {% endif %}
+                        </a>
+                    </td>
+                    <td>
                         <a href="javascript:clone_strategy('{{ s.id }}');" style="text-decoration: none;">
                             <span class="glyphicon glyphicon-duplicate orange"></span>
                         </a>
                         <span class="cut-line">¦</span>
                         <a href="javascript:modify_strategy('{{ s.id }}');" style="text-decoration: none;">
-                            <span class="glyphicon glyphicon-edit orange"></span>
+                            <span class="glyphicon glyphicon-edit green"></span>
                         </a>
                         <span class="cut-line">¦</span>
                         <a href="javascript:delete_strategy('{{ s.id }}');" style="text-decoration: none;">
-                            <span class="glyphicon glyphicon-trash orange"></span>
+                            <span class="glyphicon glyphicon-trash red"></span>
                         </a>
                     </td>
                 </tr>
@@ -154,6 +166,55 @@
         </div>
     </div>
 
+    <div class="panel panel-success" id="hook_div" style="display: none;">
+        <div class="panel-heading">Hook列表</div>
+        <div class="panel-body">
+            <div class="pull-right">
+            <a class="btn btn-success btn-xs" href="javascript:goto_hook_add_div();">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+            </div>
+            <ul id="hook_list"></ul>
+            <div id="hook_add_div" style="display: none;">
+                <hr>
+                <input type="hidden" id="current_hook_id">
+                <div class="form-inline mt10" role="form">
+                    <div class="form-group">
+                        当第<input type="number" min="1" style="width: 80px;" class="form-control" id="when_step">次,
+                    </div>
+                    <div class="form-group">
+                        检测到
+                        <select class="form-control" id="when_status">
+                            <option value="PROBLEM">异常</option>
+                            <option value="OK">恢复</option>
+                        </select>
+                        状态时,
+                    </div>
+                    <div class="form-group">
+                        执行方法:
+                        <select class="form-control" id="hook_method">
+                            <option value="GET">GET</option>
+                            <option value="POST">POST</option>
+                            <option value="DELETE">DELETE</option>
+                            <option value="PUT">PUT</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        地址(required):<textarea rows="1" class="form-control" id="hook_url" style="width: 300px"></textarea>
+                    </div>
+                    <div class="form-group">
+                        参数:<textarea rows="1" class="form-control" id="params" style="width: 300px"></textarea>
+                        参数格式:k=v,多个以","分隔;其中endpoint作为默认参数传递
+                    </div>
+                </div>
+
+                <div class="form-inline mt10" role="form">
+                <button class="btn btn-success" onclick="save_hook();">保存</button>
+                <button class="btn btn-warning" onclick="$('#hook_add_div').toggle();">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="panel panel-warning hidden">
         <div class="panel-heading">模板报警配置，对模板中的所有策略生效</div>

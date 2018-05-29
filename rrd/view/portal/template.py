@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,9 +22,12 @@ from rrd.model.portal.strategy import Strategy
 from rrd.model.portal.action import Action
 from rrd.model.portal.grp_tpl import GrpTpl
 from rrd.model.portal.host_group import HostGroup
+from rrd.model.portal.hook import Hook
 
 from rrd.utils.logger import logging
+
 log = logging.getLogger(__file__)
+
 
 @app.route('/portal/template')
 def templates_get():
@@ -76,6 +79,8 @@ def template_update_get(tpl_id):
     ss = Strategy.select_vs(where='tpl_id = %s', params=[tpl_id], order='metric')
     t.action = Action.get(t.action_id)
     log.debug(t)
+    for s in ss:
+        s.hook = Hook.total(where="strategy_id={id}".format(id=s.id))
     return render_template('portal/template/update.html', data={'tpl': t, 'ss': ss})
 
 
@@ -153,6 +158,8 @@ def template_view_get(tpl_id):
     t.parent = Template.get(t.parent_id)
     ss = Strategy.select_vs(where='tpl_id = %s', params=[tpl_id], order='metric')
     t.action = Action.get(t.action_id)
+    for s in ss:
+        s.hook = Hook.total(where="strategy_id={id}".format(id=s.id))
     return render_template('portal/template/view.html', data={'tpl': t, 'ss': ss})
 
 

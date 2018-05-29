@@ -26,6 +26,7 @@ from rrd.model.portal.host_group import HostGroup
 from rrd.model.portal.host import Host
 from rrd.model.portal.expression import Expression
 from rrd.model.portal.strategy import Strategy
+from rrd.model.portal.hook import Hook
 from rrd.model.portal.group_host import GroupHost
 from rrd.model.portal.variable import Variable
 from rrd.model.portal.metric import Metric
@@ -181,6 +182,18 @@ def api_host_variables(hostname):
         for v in variables:
             data.append({'key': v.name, 'value': v.content, 'note': v.note})
 
+    return jsonify(msg='ok', data=data)
+
+
+@app.route('/v3/api/hooks', methods=['GET'])
+def api_get_hook():
+    hooks = Hook.select_vs()
+    if not hooks:
+        return jsonify(msg='Could not find any hooks')
+
+    data = []
+    for hook in hooks:
+        data.append(hook.to_json())
     return jsonify(msg='ok', data=data)
 
 

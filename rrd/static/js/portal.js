@@ -510,11 +510,13 @@ function save_strategy() {
 }
 
 function clone_strategy(sid) {
+    $("#hook_div").hide();
     $("#current_sid").val('');
     fill_fields(sid);
 }
 
 function modify_strategy(sid) {
+    $("#hook_div").hide();
     $("#current_sid").val(sid);
     fill_fields(sid);
 }
@@ -548,6 +550,98 @@ function delete_strategy(id) {
     }, function () {
         return false;
     });
+}
+
+function goto_hook_add_div() {
+    $("#hook_add_div").show('fast');
+    $("#current_hook_id").val('');
+    $("#when_step").val(1);
+    $("#when_status").val('PROBLEM');
+    $("#hook_method").val('GET');
+    $("#hook_url").val('');
+}
+
+function list_hooks(sid) {
+    $("#add_div").hide();
+    $("#current_sid").val(sid);
+    $.getJSON('/portal/strategy/' + sid + '/hook', {}, function (json) {
+        if (json.msg.length > 0) {
+            err_message_quietly(json.msg);
+        } else {
+            var content = "";
+            var status = '';
+            $.each(json.data, function (index, hook) {
+                if (hook.when_status == 'OK') {
+                    status = '异常';
+                } else {
+                    status = '正常';
+                }
+                content += "<li>当连续第 <b>" + hook.when_step + "</b> 次检测到 <em class=h5>" + status + "</em> 状态时,";
+                content += "执行操作 " + hook.hook_method + " " + hook.hook_url;
+                content += "<span class='cut-line'>¦</span>";
+                content += "参数: " + hook.params;
+                content += "<span class='cut-line'>¦</span>";
+                content += "<a href='javascript:modify_hook(" + hook.id + ");' style='text-decoration: none;'>";
+                content += "<span class='glyphicon glyphicon-edit green'></span>";
+                content += "</a>";
+                content += "<span class='cut-line'>¦</span>";
+                content += "<a href='javascript:delete_hook(" + hook.id + ");' style='text-decoration: none;'>";
+                content += "<span class='glyphicon glyphicon-trash red'></span>";
+                content += "</a></li>";
+            });
+            $("#hook_div").show();
+            $("#hook_add_div").hide();
+            $("#hook_list").html(content);
+        }
+    })
+}
+
+function modify_hook(hid) {
+    $("#current_hook_id").val(hid);
+    $("#hook_add_div").show('fast');
+    $.getJSON('/portal/hook/' + hid, {}, function (json) {
+        $("#when_step").val(json.data.when_step);
+        $("#when_status").val(json.data.when_status);
+        $("#hook_method").val(json.data.hook_method);
+        $("#hook_url").val(json.data.hook_url);
+        $("#params").val(json.data.params);
+    });
+}
+
+function delete_hook(id) {
+    my_confirm('确定要删除？？？', ['确定', '取消'], function () {
+        $.getJSON('/portal/hook/delete/' + id, {}, function (json) {
+            if (json.msg.length > 0) {
+                err_message_quietly(json.msg);
+            } else {
+                var sid = $("#current_sid").val();
+                list_hooks(sid);
+                ok_message_quietly('Success');
+            }
+        })
+    }, function () {
+        return true;
+    });
+}
+
+function save_hook() {
+    var sid = $("#current_sid").val();
+    var hid = $("#current_hook_id").val();
+    $.post('/portal/hook/update', {
+        'hid': hid,
+        'sid': sid,
+        'when_status': $.trim($("#when_status").val()),
+        'when_step': $.trim($("#when_step").val()),
+        'hook_url': $.trim($("#hook_url").val()),
+        'hook_method': $.trim($("#hook_method").val()),
+        'params': $.trim($("#params").val())
+    }, function (json) {
+        if (json.msg.length > 0) {
+            err_message_quietly(json.msg);
+        } else {
+            list_hooks(sid);
+        }
+    }, "json")
 }
 
 function tpl_unbind_group(tpl_id, grp_id) {

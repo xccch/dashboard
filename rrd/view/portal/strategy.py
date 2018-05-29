@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+# http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,6 +18,7 @@ __author__ = 'Ulric Qin'
 from rrd import app
 from flask import request, jsonify
 from rrd.model.portal.strategy import Strategy
+from rrd.model.portal.hook import Hook
 
 
 @app.route('/portal/strategy/update', methods=['POST'])
@@ -100,6 +101,86 @@ def strategy_delete_get(sid):
     if not s:
         return jsonify(msg='no such strategy')
 
+    Hook.delete(where="strategy_id={id}".format(id=sid))
     Strategy.delete_one(sid)
+
+    return jsonify(msg='')
+
+
+@app.route('/portal/hook/<hid>')
+def hook_get(hid):
+    hid = int(hid)
+    hook = Hook.get(hid)
+    if not hook:
+        return jsonify(msg='no such hook')
+
+    return jsonify(msg='', data=hook.to_json())
+
+
+@app.route('/portal/strategy/<sid>/hook')
+def strategy_list_hook(sid):
+    sid = int(sid)
+    s = Strategy.get(sid)
+    if not s:
+        return jsonify(msg='no such strategy')
+
+    hooks = Hook.select_vs(where="strategy_id={id}".format(id=sid))
+    data = []
+    for hook in hooks:
+        data.append(hook.to_json())
+    return jsonify(msg='', data=data)
+
+
+@app.route('/portal/hook/update', methods=['POST'])
+def hook_update_post():
+    hid = request.form['hid'].strip()
+    sid = request.form['sid'].strip()
+    when_status = request.form['when_status'].strip()
+    when_step = request.form['when_step'].strip()
+    hook_method = request.form['hook_method'].strip()
+    hook_url = request.form['hook_url'].strip()
+    params = request.form['params'].strip()
+
+    if not when_step or not hook_url:
+        return jsonify(msg='when_step or hook_url is blank')
+
+    if hid:
+        # update
+        Hook.update_dict(
+            {
+                'when_status': when_status,
+                'when_step': when_step,
+                'hook_method': hook_method,
+                'hook_url': hook_url,
+                'params': params
+            },
+            'id=%s',
+            [hid]
+        )
+        return jsonify(msg='')
+
+    # insert
+    Hook.insert(
+        {
+            'strategy_id': sid,
+            'expression_id': 0,
+            'when_status': when_status,
+            'when_step': when_step,
+            'hook_method': hook_method,
+            'hook_url': hook_url,
+            'params': params
+        }
+    )
+    return jsonify(msg='')
+
+
+@app.route('/portal/hook/delete/<hid>')
+def hook_delete_get(hid):
+    hid = int(hid)
+    hook = Hook.get(hid)
+    if not hook:
+        return jsonify(msg='no such hook')
+
+    Hook.delete_one(hid)
 
     return jsonify(msg='')
