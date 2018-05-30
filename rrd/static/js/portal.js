@@ -572,9 +572,9 @@ function list_hooks(sid) {
             var status = '';
             $.each(json.data, function (index, hook) {
                 if (hook.when_status == 'OK') {
-                    status = '异常';
+                    status = '恢复';
                 } else {
-                    status = '正常';
+                    status = '异常';
                 }
                 content += "<li>当连续第 <b>" + hook.when_step + "</b> 次检测到 <em class=h5>" + status + "</em> 状态时,";
                 content += "执行操作 " + hook.hook_method + " " + hook.hook_url;
