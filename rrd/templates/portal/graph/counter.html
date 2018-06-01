@@ -12,7 +12,7 @@
         $(function(){
             var endpoints = new Array();
             var category = $("#counter-category").val();
-            var system_metric_prefix = ['agent', 'df', 'cpu', 'disk', 'kernel'];
+            var system_metric_prefix = ['agent', 'df', 'cpu', 'disk', 'kernel', 'mem', 'load', 'TcpExt'];
             $(document).ready (function() {
                 $('.shiftCheckbox').shiftcheckbox();
                 $("#check_all_endpoints").bind("click", fn_check_all_hosts);

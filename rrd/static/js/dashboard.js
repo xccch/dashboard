@@ -47,7 +47,7 @@ function fn_list_counters() {
     var limit = $("#counter-limit").val();
     var page = $("#counter-page").val();
     var category = $("#counter-category").val();
-    var system_metric_prefix = ['agent', 'df', 'cpu', 'disk', 'kernel'];
+    var system_metric_prefix = ['agent', 'df', 'cpu', 'disk', 'kernel', 'mem', 'load', 'TcpExt'];
     $(".loading").show();
     $.ajax({
         method: "POST",
