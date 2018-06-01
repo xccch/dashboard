@@ -70,7 +70,7 @@ def app_before():
         return redirect("/")
 
     if g.user and g.user.role == 0 and \
-            path not in ['/auth/logout', '/user/profile', '/charts', '/portal/hostgroup', '/', '/user/chpwd'] and \
+            path not in ['/auth/logout', '/user/profile', '/chart', '/portal/hostgroup', '/', '/user/chpwd'] and \
             not (path.startswith('/portal/group/') and (path.endswith('/graph') or path.endswith('hosts'))) and \
             not (path == '/api/counters' and request.method == 'POST') and \
             not (path == '/api/endpoints' and request.method == 'GET'):
