@@ -30,11 +30,11 @@
                     for (var i in items) {
                         var c = items[i];
                         if (category == 'system') {
-                            if (!c[0].split('.')[0].indexOf(system_metric_prefix)) {
+                            if (system_metric_prefix.indexOf(c[0].split('.')[0]) == -1) {
                                 continue
                             }
                         } else if (category == 'app') {
-                            if (c[0].split('.')[0].indexOf(system_metric_prefix)) {
+                            if (system_metric_prefix.indexOf(c[0].split('.')[0]) != -1) {
                                 continue
                             }
                         } else {
