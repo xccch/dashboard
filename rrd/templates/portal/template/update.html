@@ -75,7 +75,7 @@
                     <td>
                         {{ s.hook }}
                         <span class="cut-line">¦</span>
-                        <a href="javascript:list_hooks('{{ s.id }}');" style="text-decoration: none;">
+                        <a href="javascript:list_hooks('{{ s.id }}', '{{ s.metric }}');" style="text-decoration: none;">
                         {% if s.hook > 0 %}
                             <span class="glyphicon glyphicon-list green"></span>
                         {% else %}
@@ -167,7 +167,7 @@
     </div>
 
     <div class="panel panel-success" id="hook_div" style="display: none;">
-        <div class="panel-heading">Hook列表</div>
+        <div class="panel-heading">Metric(<span id="metric_name_title"></span>) -> Hook列表</div>
         <div class="panel-body">
             <div class="pull-right">
             <a class="btn btn-success btn-xs" href="javascript:goto_hook_add_div();">
@@ -197,15 +197,22 @@
                             <option value="POST">POST</option>
                             <option value="DELETE">DELETE</option>
                             <option value="PUT">PUT</option>
+                            <option value="CALL">CALL</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        地址(required):<textarea rows="1" class="form-control" id="hook_url" style="width: 300px"></textarea>
+                        地址/方法(required):<textarea rows="1" class="form-control" id="hook_url" style="width: 300px"></textarea>
                     </div>
                     <div class="form-group">
                         参数:<textarea rows="1" class="form-control" id="params" style="width: 300px"></textarea>
-                        参数格式:k=v,多个以","分隔;其中endpoint作为默认参数传递
+                        参数格式:k=v,多个以","分隔
                     </div>
+                </div>
+                <div class="form-inline mt10" role="form">
+                    <ul>
+                        <li>CALL方法表示特殊的处理方法,方法名定制在后端woker代码中;其他方法为远程调用http</li>
+                        <li>参数中host作为默认参数传递(取metric的endpoint),如果手工配置了host,则覆盖默认参数</li>
+                    </ul>
                 </div>
 
                 <div class="form-inline mt10" role="form">

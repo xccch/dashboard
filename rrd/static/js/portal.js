@@ -561,9 +561,10 @@ function goto_hook_add_div() {
     $("#hook_url").val('');
 }
 
-function list_hooks(sid) {
+function list_hooks(sid, sname) {
     $("#add_div").hide();
     $("#current_sid").val(sid);
+    $("#metric_name_title").html(sname);
     $.getJSON('/portal/strategy/' + sid + '/hook', {}, function (json) {
         if (json.msg.length > 0) {
             err_message_quietly(json.msg);
