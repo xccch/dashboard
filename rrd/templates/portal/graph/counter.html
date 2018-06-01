@@ -11,6 +11,8 @@
 
         $(function(){
             var endpoints = new Array();
+            var category = $("#counter-category").val();
+            var system_metric_prefix = ['agent', 'df', 'cpu', 'disk', 'kernel'];
             $(document).ready (function() {
                 $('.shiftCheckbox').shiftcheckbox();
                 $("#check_all_endpoints").bind("click", fn_check_all_hosts);
@@ -27,6 +29,17 @@
 
                     for (var i in items) {
                         var c = items[i];
+                        if (category == 'system') {
+                            if (!c[0].split('.')[0].indexOf(system_metric_prefix)) {
+                                continue
+                            }
+                        } else if (category == 'app') {
+                            if (c[0].split('.')[0].indexOf(system_metric_prefix)) {
+                                continue
+                            }
+                        } else {
+
+                        }
                         var display_counter_type = "计数器";
                         if(c[1] == "GAUGE") {
                             display_counter_type = "原始值";
@@ -138,13 +151,18 @@
                                 <div class="form-group">
                                     <select class="form-control input-sm" id="counter-limit" onchange="fn_list_counters();return false;">
                                         <option value="50"> Limit 50</option>
-                                        <option value="100">Limit 100</option>
+                                        <option value="100" selected>Limit 100</option>
                                         <option value="500">Limit 500</option>
                                     </select>
                                     <select class="form-control input-sm" id="counter-page" onchange="fn_list_counters();return false;">
                                         {%for p in range(1, 21)%}
                                         <option value="{{p}}"> page {{p}}</option>
                                         {%endfor%}
+                                    </select>
+                                    <select class="form-control input-sm" id="counter-category" onchange="fn_list_counters();return false;">
+                                        <option value="all" selected>All</option>
+                                        <option value="system">System</option>
+                                        <option value="app">Application</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
