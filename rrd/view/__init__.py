@@ -72,7 +72,7 @@ def app_before():
     if g.user and g.user.role == 0 and \
             path not in ['/auth/logout', '/user/profile', '/charts', '/portal/hostgroup', '/', '/user/chpwd'] and \
             not (path.startswith('/portal/group/') and (path.endswith('/graph') or path.endswith('hosts'))) and \
-            not (path == '/api/counters' and request.method == 'GET') and \
+            not (path == '/api/counters' and request.method == 'POST') and \
             not (path == '/api/endpoints' and request.method == 'GET'):
         return jsonify({'msg': 'You have no permission'})
 
