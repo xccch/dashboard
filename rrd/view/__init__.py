@@ -16,7 +16,7 @@
 
 import datetime
 import time
-from flask import g, session, request, redirect
+from flask import g, session, request, redirect, jsonify
 
 from rrd import app, config
 from rrd.view.utils import get_usertoken_from_session, get_current_user_profile
@@ -66,6 +66,16 @@ def app_before():
             not path.startswith("/v3/"):
         return redirect("/auth/login")
 
+    if g.user and path == "/auth/login":
+        return redirect("/")
+
+    if g.user and g.user.role == 0 and \
+            path not in ['/auth/logout', '/user/profile', '/charts', '/portal/hostgroup', '/', '/user/chpwd'] and \
+            not (path.startswith('/portal/group/') and (path.endswith('/graph') or path.endswith('hosts'))) and \
+            not (path == '/api/counters' and request.method == 'GET') and \
+            not (path == '/api/endpoints' and request.method == 'GET'):
+        return jsonify({'msg': 'You have no permission'})
+
     if path.startswith("/screen"):
         g.nav_menu = "nav_screen"
     elif path.startswith("/portal/hostgroup") or path.startswith("/portal/group"):
@@ -78,5 +88,7 @@ def app_before():
         g.nav_menu = "p_nodata"
     elif path.startswith("/portal/alarm-dash"):
         g.nav_menu = "p_alarm-dash"
+    elif path.startswith("/portal/metric") or path.startswith("/portal/tag"):
+        g.nav_menu = "p_metric"
     else:
         g.nav_menu = ""

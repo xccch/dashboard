@@ -93,8 +93,10 @@
                                         <option value="{{p}}"> page {{p}}</option>
                                         {%endfor%}
                                     </select>
+                                    {% if g.user.role != 0 %}
                                     <span class="cut-line">¦</span>
                                     <button class="btn btn-default btn-sm" onclick="fn_delete_endpoints();return false;">{{_('delete endpoints')}}</button>
+                                    {% endif %}
                                 </div>
                             </form>
                             <hr/>
@@ -179,7 +181,9 @@
                                 <div class="form-group">
                                     <input id="counter-filter" type="text" class="form-control input-sm">
                                     <button class="btn btn-default btn-sm btn-info" onclick="filter_counter();return false;">{{_('quick filter')}}</button>
+                                    {% if g.user.role != 0 %}
                                     <button class="btn btn-default btn-sm" onclick="fn_delete_counters();return false;">{{_('delete counters')}}</button>
+                                    {% endif %}
                                 </div>
 
                                 <div class="dropdown form-group pull-right">

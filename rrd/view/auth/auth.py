@@ -88,7 +88,7 @@ def auth_logout():
         view_utils.logout_user(g.user_token)
         return redirect("/auth/login")
 
-@app.route("/auth/register", methods=["GET", "POST"])
+@app.route("/auth/register", methods=["POST"])
 def auth_register():
     if request.method == "GET":
         if g.user:

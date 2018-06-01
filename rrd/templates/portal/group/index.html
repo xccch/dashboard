@@ -40,6 +40,7 @@
                 <td>{{ v.grp_name }}</td>
                 <td>{{ v.create_user }}</td>
                 <td>
+                    {% if g.user.role != 0 %}
                     <a href="{{ url_for('group_templates_get', grp_id=v.id) }}">templates</a>
                     <span class="cut-line">¦</span>
                     <a href="{{ url_for('group_hosts_list', group_id=v.id) }}">hosts</a>
@@ -50,6 +51,10 @@
                     <span class="cut-line">¦</span>
                     <a href="{{ url_for('variable_list_get', group_id=v.id) }}">variables</a>
                     <span class="cut-line">¦</span>
+                    {% else %}
+                    <a href="{{ url_for('group_hosts_list', group_id=v.id) }}">hosts</a>
+                    <span class="cut-line">¦</span>
+                    {% endif %}
                     <a href="{{ url_for('graph_list_get', group_id=v.id) }}" target="_blank">GRAPH</a>
                     {% if v.writable(g.user) %}
                         <span class="cut-line">¦</span>
