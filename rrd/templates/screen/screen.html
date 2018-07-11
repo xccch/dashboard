@@ -11,21 +11,16 @@
                 <li> {{screen_layout.screen_sub_menu(pscreen, screen, sub_screens)}} </li>
 
                 {%if screen%}
-                    <li><a href="/screen/{{screen.id}}/edit"><i class="icon-edit"></i>编辑</a></li>
+<!--                    <li><a href="/screen/{{screen.id}}/edit"><i class="icon-edit"></i>编辑</a></li>
                     <li><a href="javascript:;" class="icon-muledit"><i></i>批量编辑</a></li>
                     <li><a href="/screen/{{screen.id}}/delete" onclick="return confirm('确定要删除这个screen?');"><i class="icon-trash"></i>删除</a></li>
                     <li><a href="/screen/{{screen.id}}/clone" onclick="return confirm('确定要复制出来一个新的screen吗?');">克隆</a></li>
-                    <li><a href="/screen/{{screen.id}}/graph"><i class="icon-plus"></i>+graph</a></li>
-                    {%if g.legend == "on"%}
-                    <li><a href="#" onclick="fn_query({legend: 'off'})"><i class="icon-plus"></i>隐藏legend</a></li>
-                    {%else%}
-                    <li><a href="#" onclick="fn_query({legend: 'on'})"><i class="icon-plus"></i>显示legend</a></li>
-                    {%endif%}
+                    <li><a href="/screen/{{screen.id}}/graph"><i class="icon-plus"></i>+graph</a></li> -->
 
                     <li>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                布局 <span class="caret"></span>
+                                页面布局 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="#" onclick="fn_query({cols: '1'})"><small>1列</small></a></li>
@@ -39,7 +34,7 @@
                     <li>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                时间段 <span class="caret"></span>
+                                时间段选项 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="#" onclick="fn_query({start: -3600})"><small>1h</small></a></li>
@@ -54,10 +49,39 @@
                             </ul>
                         </div>
                     </li>
+
+		    <li>自定义时间:
+		    	<div id="app" class="btn-group">
+		    	  <div class="picker">
+		    	    <el-date-picker
+		    	      v-model="dataValue"
+		    	      type="datetime"
+		    	      placeholder="开始时间">
+		    	    </el-date-picker>
+		    	    <el-date-picker
+                    	      v-model="dataValue2"
+                    	      type="datetime"
+                    	      placeholder="结束时间">
+                    	    </el-date-picker>
+		    	    <el-button @click="reUrlPath">查询</el-button>
+		    	  </div>
+		    	</div>
+		    </li>
+
+
+                    {%if g.legend == "off"%}
+                    <li><a href="#" onclick="fn_query({legend: 'on'})"><i class="icon-plus"></i>显示主机</a></li>
+                    {%else%}
+                    <li><a href="#" onclick="fn_query({legend: 'off'})"><i class="icon-plus"></i>隐藏主机</a></li>
+                    {%endif%}
+
                 {%endif%}
             </ul>
         </div>
     </div>
+
+
+
     {%endblock%}
 
     {% block graphs %}
@@ -70,12 +94,80 @@
     </div>
     {%endblock%}
 
-    <script>
-    $(function(){
-        // 渲染当前screen 的id, 编辑时用
-        window.sid = {{ sid }};
-    });
-    </script>
+<script src="/static/js/vue.js"></script>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="/static/css/index.css">
+<style>
+  .el-date-editor input.el-input__inner{
+    height: 22px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 12px;
+    width: 150px;
+  }
+  .el-date-editor i{
+    display: none;
+  }
+  .el-button{
+    height: 22px;
+    padding: 2px 15px;
+    font-size: 12px;
+  }
+</style>
+<!-- 引入组件库 -->
+<script src="/static/js/index.js"></script>
+<script src="/static/js/axios.min.js"></script>
+<script type="text/javascript">
+  var app = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        dataValue: '',
+	dataValue2: ''
+      }
+    },
+
+  computed: {
+      tNumber: function () {
+        var from_time = this.dataValue
+        var end_time = this.dataValue2
+
+        var from_date = new Date(from_time);
+        var end_date = new Date(end_time);
+        var time_different = (end_date - from_date)/1000;
+        return  time_different
+      }
+    },
+
+  methods: {
+      reUrlPath: function () {
+        let search = (isNaN(this.tNumber) || this.tNumber === 0) ? 43200 : this.tNumber
+	if (search < 0){
+	    alert("结束时间小于开始时间,请重新选择!");
+	    return
+	}
+        window.location.href = window.location.origin + window.location.pathname + '?start=-' + search
+      },
+
+
+    //methods: {
+    //  submit: function () {
+    //    console.log(this.dataValue)
+    //    var url = ''
+    //    var params = {
+    //      time: this.dataValue
+    //    }
+    //    axios.post('/', params)
+    //    .then(function (res) {
+    //      console.log(res)
+    //    })
+    //    .catch(function (err) {
+    //      console.log(err)
+    //    })
+    //  }
+    }
+  })
+</script>
 
 
 {%endblock%}

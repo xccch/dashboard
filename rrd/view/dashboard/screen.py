@@ -29,12 +29,40 @@ from rrd import consts
 from rrd.utils.graph_urls import generate_graph_urls 
 from rrd import config
 
-@app.route("/screen", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def dash_screens():
     top_screens = DashboardScreen.gets_by_pid(pid='0') or []
     top_screens = sorted(top_screens, key=lambda x:x.name)
 
-    return render_template("screen/index.html", **locals())
+    start = request.args.get("start")
+    end = request.args.get("end")
+
+    top_screens = DashboardScreen.gets_by_pid(pid=0)
+    top_screens = sorted(top_screens, key=lambda x:x.name)
+
+    screen = DashboardScreen.get(605)
+    if not screen:
+        abort(404, "no screen")
+
+    if str(screen.pid) == '0':
+        sub_screens = DashboardScreen.gets_by_pid(pid=sid)
+        sub_screens = sorted(sub_screens, key=lambda x:x.name)
+        return render_template("screen/top_screen.html", **locals())
+
+    pscreen = DashboardScreen.get(screen.pid)
+    sub_screens = DashboardScreen.gets_by_pid(pid=screen.pid)
+    sub_screens = sorted(sub_screens, key=lambda x:x.name)
+    graphs = DashboardGraph.gets_by_screen_id(screen.id)
+
+    all_graphs = []
+
+    for graph in graphs:
+        all_graphs.extend(generate_graph_urls(graph, start, end) or [])
+
+    all_graphs = sorted(all_graphs, key=lambda x:x.position)
+
+    return render_template("screen/screen.html", **locals())
+
 
 @app.route("/screen/<int:sid>/delete")
 def dash_screen_delete(sid):
@@ -90,7 +118,7 @@ def dash_graph_delete(gid):
     DashboardGraph.remove(gid)
     return redirect("/screen/" + graph.screen_id)
 
-@app.route("/screen/<int:sid>")
+@app.route("/screen/<int:sid>", methods=["GET", "POST"])
 def dash_screen(sid):
     start = request.args.get("start")
     end = request.args.get("end")

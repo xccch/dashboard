@@ -52,6 +52,9 @@ def api_version():
 def api_health():
     return 'ok'
 
+@app.route('/v3/api/test', methods=['GET', 'POST', 'DELETE', 'PUT'])
+def api_test():
+    return jsonify(request.args)
 
 @app.route('/api/user/<int:user_id>/inteams/<team_names>')
 def api_user_in_teams(user_id, team_names):

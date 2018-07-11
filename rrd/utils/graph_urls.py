@@ -91,7 +91,7 @@ def _generate_graph_urls(graph, counters, endpoint_list, start, end):
             else:
                 new_g.src = '''/chart/h?id=%s&start=%s''' %(tmp_graph_id, start or (0-graph.timespan))
             if graph.method == 'SUM':
-                new_g.src += "&sum=on"
+                new_g.src += "&sum=off"
             else:
                 new_g.src += "&cf=%s" %graph.method
 
@@ -109,7 +109,7 @@ def _generate_graph_urls(graph, counters, endpoint_list, start, end):
             else:
                 new_g.src = '''/chart/k?id=%s&start=%s''' %(tmp_graph_id, start or (0-graph.timespan))
             if graph.method == 'SUM':
-                new_g.src += "&sum=on"
+                new_g.src += "&sum=off"
             else:
                 new_g.src += "&cf=%s" %graph.method
 
@@ -125,7 +125,7 @@ def _generate_graph_urls(graph, counters, endpoint_list, start, end):
         else:
             new_g.src = '''/chart/a?id=%s&start=%s''' %(tmp_graph_id, start or (0-graph.timespan))
         if graph.method == 'SUM':
-            new_g.src += "&sum=on"
+            new_g.src += "&sum=off"
         else:
             new_g.src += "&cf=%s" %graph.method
 

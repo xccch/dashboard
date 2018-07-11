@@ -19,7 +19,7 @@ import re
 from flask import request, abort, g, render_template
 from rrd import app, config
 from rrd import corelib
-
+from rrd.model.screen import DashboardScreen
 
 def get_api_endpoints(q, tags, page=1, limit=100):
     if not q and not tags:
@@ -34,13 +34,12 @@ def get_api_endpoints(q, tags, page=1, limit=100):
 
     return j
 
-
-@app.route("/")
+@app.route("/dashboard")
 def index():
     q = request.args.get("q") or "."
     raw_tag = request.args.get("tags") or ""
     tags = ','.join(re.split('\s*,\s*', raw_tag))
-    limit = int(request.args.get("limit") or 50)
+    limit = int(request.args.get("limit") or 15)
     page = int(request.args.get("page") or 1)
 
     endpoint_objs = get_api_endpoints(q, tags, page, limit)
